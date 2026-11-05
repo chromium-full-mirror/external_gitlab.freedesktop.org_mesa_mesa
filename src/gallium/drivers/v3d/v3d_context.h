@@ -77,7 +77,7 @@ void v3d_job_add_bo(struct v3d_job *job, struct v3d_bo *bo);
 #define V3D_DIRTY_FLAT_SHADE_FLAGS    (1ull << 20)
 #define V3D_DIRTY_PRIM_MODE           (1ull << 21)
 
-#define V3D_DIRTY_UNCOMPILED_CS       (1ull << 23)
+#define V3D_DIRTY_UNCOMPILED_COMPUTE  (1ull << 23)
 #define V3D_DIRTY_UNCOMPILED_VS       (1ull << 24)
 #define V3D_DIRTY_UNCOMPILED_GS       (1ull << 25)
 #define V3D_DIRTY_UNCOMPILED_FS       (1ull << 26)
@@ -853,7 +853,7 @@ void v3d_flush_jobs_reading_resource(struct v3d_context *v3d,
                                      enum v3d_flush_cond flush_cond,
                                      bool is_compute_pipeline);
 void v3d_update_compiled_shaders(struct v3d_context *v3d, enum mesa_prim prim_mode);
-void v3d_update_compiled_cs(struct v3d_context *v3d);
+void v3d_update_compiled_compute(struct v3d_context *v3d);
 
 bool v3d_rt_format_is_emulated(enum pipe_format f);
 bool v3d_rt_format_supported(const struct v3d_device_info *devinfo,

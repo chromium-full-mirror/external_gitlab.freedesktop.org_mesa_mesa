@@ -1433,7 +1433,7 @@ v3d_launch_grid(struct pipe_context *pctx, const struct pipe_grid_info *info)
 
         v3d_predraw_check_stage_inputs(pctx, MESA_SHADER_COMPUTE);
 
-        v3d_update_compiled_cs(v3d);
+        v3d_update_compiled_compute(v3d);
 
         if (!v3d->prog.compute->resource) {
                 mesa_loge_once("Compute shader failed to compile.  "

@@ -1008,12 +1008,12 @@ v3d_update_compiled_shaders(struct v3d_context *v3d, enum mesa_prim prim_mode)
 }
 
 void
-v3d_update_compiled_cs(struct v3d_context *v3d)
+v3d_update_compiled_compute(struct v3d_context *v3d)
 {
         struct v3d_key local_key;
         struct v3d_key *key = &local_key;
 
-        if (!(v3d->dirty & (V3D_DIRTY_UNCOMPILED_CS |
+        if (!(v3d->dirty & (V3D_DIRTY_UNCOMPILED_COMPUTE |
                             V3D_DIRTY_COMPTEX))) {
                 return;
         }
@@ -1021,13 +1021,9 @@ v3d_update_compiled_cs(struct v3d_context *v3d)
         memset(key, 0, sizeof(*key));
         v3d_setup_shared_key(v3d, key, &v3d->tex[MESA_SHADER_COMPUTE]);
 
-        struct v3d_compiled_shader *cs =
+        v3d->prog.compute =
                 v3d_get_compiled_shader(v3d, key, sizeof(*key),
                                         v3d->prog.bind_compute);
-        if (cs != v3d->prog.compute) {
-                v3d->prog.compute = cs;
-                v3d->dirty |= V3D_DIRTY_COMPILED_CS; /* XXX */
-        }
 }
 
 static inline uint32_t
@@ -1165,7 +1161,7 @@ v3d_compute_state_bind(struct pipe_context *pctx, void *state)
         struct v3d_context *v3d = v3d_context(pctx);
 
         v3d->prog.bind_compute = state;
-        v3d->dirty |= V3D_DIRTY_UNCOMPILED_CS;
+        v3d->dirty |= V3D_DIRTY_UNCOMPILED_COMPUTE;
 }
 
 static void *
@@ -1185,7 +1181,7 @@ v3d_get_compute_state_info(struct pipe_context *pctx,
 
         /* this API requires compiled shaders */
         v3d_compute_state_bind(pctx, cso);
-        v3d_update_compiled_cs(v3d);
+        v3d_update_compiled_compute(v3d);
 
         info->max_threads = V3D_CHANNELS * v3d->prog.compute->prog_data.base->threads;
         info->preferred_simd_size = V3D_CHANNELS;
