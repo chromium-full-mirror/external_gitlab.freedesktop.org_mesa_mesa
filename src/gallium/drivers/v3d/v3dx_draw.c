@@ -1266,7 +1266,8 @@ v3d_draw_vbo(struct pipe_context *pctx, const struct pipe_draw_info *info,
                 v3d_emit_gl_shader_state(v3d, info);
         }
 
-        v3d->dirty = 0;
+        /* Keep the compute state dirty until the next dispatch. */
+        v3d->dirty &= V3D_DIRTY_UNCOMPILED_COMPUTE | V3D_DIRTY_COMPTEX;
 
         /* The Base Vertex/Base Instance packet sets those values to nonzero
          * for the next draw call only.

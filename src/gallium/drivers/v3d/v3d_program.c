@@ -1024,6 +1024,8 @@ v3d_update_compiled_compute(struct v3d_context *v3d)
         v3d->prog.compute =
                 v3d_get_compiled_shader(v3d, key, sizeof(*key),
                                         v3d->prog.bind_compute);
+
+        v3d->dirty &= ~(V3D_DIRTY_UNCOMPILED_COMPUTE | V3D_DIRTY_COMPTEX);
 }
 
 static inline uint32_t
